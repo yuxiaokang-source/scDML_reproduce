@@ -1,4 +1,4 @@
-## 服务器上可以设置成
+
 setwd(system("pwd", intern = T) )
 #setwd("/Users/xiaokangyu/Desktop/scDML/scDML_project/BERMUDA/")
 suppressPackageStartupMessages({
@@ -14,20 +14,15 @@ suppressPackageStartupMessages({
 })
 start.time <- Sys.time()
 spec <- matrix(
-  c("dataset",  "d", 1, "character","dataset name", ## 第二个参数只能一个字符好像
-    "filepath", "f",1,"character","file folder of data", ## 传入目标文件所在的路径
-    'savedir',"s",1,"character","where to save result",## 结果存在哪里
+  c("dataset",  "d", 1, "character","dataset name", 
+    "filepath", "f",1,"character","file folder of data", 
+    'savedir',"s",1,"character","where to save result",
     "verbose", "v", 0, "integer","verbose information",
     "Save",  "w", 0, "integer","whethre to save preprocessed result",
      "help",   "h", 0, "logical","help information"
     ),
   byrow=TRUE, ncol=5)
 opt <- getopt(spec=spec,debug=FALSE)
-#print(opt)
-###################### 设置默认值 ################
-
-# args <- commandArgs()
-# print(args)
 
 if ( is.null(opt$verbose)) {
   opt$verbose = 1
@@ -44,19 +39,6 @@ savedir=opt$savedir
 verbose=opt$verbose
 save= opt$Save
 
-
-################################## DEBUG #############################
-#Rscript fastMNN/fastMNN.R -d "4batch_4celltype_multi" -f "/Users/xiaokangyu/Desktop/单细胞学习/单细胞数据集/splatter_sim/"
-#-sd "/Users/xiaokangyu/Desktop/tDCA_project/evaluation/"
-# method="fastMNN"
-# print(paste0("method=",method))
-# dataset="4batch_4celltype_multi"
-# filepath="/Users/xiaokangyu/Desktop/单细胞学习/单细胞数据集/splatter_sim/"
-# savedir="/Users/xiaokangyu/Desktop/tDCA_project/evaluation/" # 我应该把结果存在evluation的结果里，这样就能统一读了
-# verbose=1
-# save=1
-
-######################################################################
 ### create file
 parent_dir=savedir
 output_dir <- file.path(parent_dir, dataset)
@@ -79,7 +61,7 @@ dataset_path=paste0(filepath,"/",dataset,"_raw.rds")
 data=readRDS(dataset_path)
 save_folder=paste0(savedir,"/",dataset,"/",method,"/")
 
-print("读取数据用时:")
+print("read data cost:")
 print(Sys.time()-start.time)
 # 
 if(verbose){
@@ -102,7 +84,7 @@ map <- mapLevels(x=data@colData$BATCH)
 map_df=t((do.call(rbind.data.frame,list(map))))
 map_rule=data.frame(int=map_df[,1],batch=rownames(map_df))
 print(map_rule)
-write.csv(map_rule,paste0(save_folder,"bermuda_map_rule_batch.csv"),row.names=F)## 不写入行名
+write.csv(map_rule,paste0(save_folder,"bermuda_map_rule_batch.csv"),row.names=F)## not write row names
 ###############
 map <- mapLevels(x=data@colData$celltype)
 map_df=t((do.call(rbind.data.frame,list(map))))

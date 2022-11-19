@@ -68,12 +68,12 @@ else:
         batch_key="BATCH"
     )
     
-scvi.model.SCVI.setup_anndata(
-    adata,
-    layer="counts",
-    batch_key="BATCH",
-)
-#scvi.data.setup_anndata(adata, layer="counts", batch_key="BATCH")
+# scvi.model.SCVI.setup_anndata(
+#     adata,
+#     layer="counts",
+#     batch_key="BATCH",
+# )
+scvi.data.setup_anndata(adata, layer="counts", batch_key="BATCH")
 
 model = scvi.model.SCVI(adata)
 print(model)
